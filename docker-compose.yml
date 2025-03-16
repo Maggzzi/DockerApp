@@ -1,0 +1,37 @@
+version: "3.1"
+
+services: 
+  php: 
+    #kan deze image niet meer gebruiken
+    #image: php:7.4-apache
+
+    #gaat een image maken met extensie in Dockerfile "docker-php-ext-install mysqli"
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports: 
+      - 80:80
+    volumes: 
+      - ./src:/var/www/html
+
+  adminer: 
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      #deze bind mount werkt niet want het niet mijn database onthoud, dus ik ga een named volume gebruiken
+      #- ./mysql-data:/var/lib/mysql
+
+      #named volume:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
+
